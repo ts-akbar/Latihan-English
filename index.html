@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LATIHAN BAHASA INGGERIS JANA AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0fdf4;
+        }
+
+        .correct-ans { border-color: #22c55e !important; background-color: #dcfce7 !important; }
+        .wrong-ans { border-color: #ef4444 !important; background-color: #fee2e2 !important; }
+        
+        /* Penggayaan Gambarajah Lazim & Kotak Diagram */
+        .bentuk-lazim-container {
+            display: inline-block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.25rem;
+            text-align: right;
+            line-height: 1.2;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            padding: 10px 15px;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            min-width: 100px;
+        }
+        .bentuk-lazim-bottom {
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
+            margin-bottom: 5px;
+        }
+        
+        /* Gambarajah (Ikonografi Dinamik yang Dijamin Berfungsi) */
+        .quiz-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px; 
+            background-color: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+            margin-bottom: 12px;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.03);
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            min-height: 120px;
+        }
+        .quiz-diagram i {
+            font-size: 3.5rem;
+        }
+        .quiz-diagram-label {
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            color: #64748b; 
+            margin-top: 10px; 
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        /* Styles for Histogram/Bar Chart */
+        .bar-chart-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            height: 100px;
+            margin: 20px 0 30px 20px;
+            border-bottom: 2px solid #333;
+            border-left: 2px solid #333;
+            padding-left: 10px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .bar {
+            width: 40px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Antaramuka Utama -->
+    <div class="max-w-5xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-xl">
+        
+        <!-- Header Aplikasi -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700 mb-2">
+                <i class="fas fa-book-open mr-2"></i>ENGLISH EXAM GENERATOR
+            </h1>
+            <p class="text-sm text-gray-600 font-medium">Berdasarkan DSKP Bahasa Inggeris Tahun 1 - 6 (CEFR Aligned) KPM</p>
+        </div>
+
+        <!-- Panel Kawalan -->
+        <div class="bg-blue-50 p-6 rounded-xl border border-blue-200 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun / Darjah</label>
+                    <select id="tahun" class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none" onchange="updateTopics()">
+                        <option value="1">Tahun 1</option>
+                        <option value="2">Tahun 2</option>
+                        <option value="3">Tahun 3</option>
+                        <option value="4">Tahun 4</option>
+                        <option value="5">Tahun 5</option>
+                        <option value="6">Tahun 6</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Unit / Topik</label>
+                    <select id="topik" class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none">
+                        <!-- Akan diisi oleh JS -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Set Soalan</label>
+                    <select id="set" class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="1">Set 1</option>
+                        <option value="2">Set 2</option>
+                        <option value="3">Set 3</option>
+                        <option value="4">Set 4</option>
+                        <option value="5">Set 5</option>
+                        <option value="6">Set 6</option>
+                        <option value="7">Set 7</option>
+                        <option value="8">Set 8</option>
+                        <option value="9">Set 9</option>
+                        <option value="10">Set 10</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                <button onclick="generateLatihan()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md">
+                    <i class="fas fa-magic mr-2"></i> Jana 30 Soalan Unik
+                </button>
+                <button onclick="bukaDanEditCetak()" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md">
+                    <i class="fas fa-print mr-2"></i> Pratonton & Cetak Latihan
+                </button>
+            </div>
+            <p class="text-center text-xs font-semibold text-gray-500 mt-4">* Please answer in English (1 or 2 words only). E.g: apple, is playing, went</p>
+        </div>
+
+        <!-- Kawasan Soalan -->
+        <div id="latihan-container" class="hidden">
+            <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2 md:mb-0" id="tajuk-latihan">Set Latihan</h2>
+                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded border border-yellow-300 shadow-sm">Kompilasi: 15 Gambarajah & 15 Teks</span>
+            </div>
+
+            <div id="soalan-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Soalan akan diisi di sini oleh JS -->
+            </div>
+
+            <!-- Keputusan & Butang Semak -->
+            <div class="mt-10 text-center">
+                <button id="btn-semak" onclick="semakJawapan()" class="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg w-full md:w-auto">
+                    <i class="fas fa-check-circle mr-2"></i> Semak Jawapan / Check Answers
+                </button>
+                
+                <div id="keputusan-box" class="hidden mt-6 p-6 bg-blue-50 border-2 border-blue-200 rounded-xl max-w-md mx-auto">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2">Keputusan Anda</h3>
+                    <p class="text-4xl font-black text-gray-800" id="skor-teks">0 / 30</p>
+                    <p class="text-2xl font-bold text-green-600 mt-2" id="peratus-teks">0%</p>
+                    <p class="text-sm text-gray-600 mt-3">Kiraan: (Markah / 30) × 100</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- State Kosong -->
+        <div id="empty-state" class="text-center py-16">
+            <i class="fas fa-book text-6xl text-blue-200 mb-4"></i>
+            <p class="text-gray-500 text-lg">Sila pilih Tahun, Topik dan Set, kemudian klik "Jana Soalan Unik" untuk memulakan.</p>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 text-sm text-gray-500 mt-auto">
+        Powered By <strong>Ts. AKBAR</strong> @2026 Hak Cipta Terpelihara.
+    </footer>
+
+    <!-- Logik Aplikasi (JavaScript) -->
+    <script>
+        // Data Topik Mengikut DSKP Bahasa Inggeris (CEFR) Tahun 1 - 6
+        const dskpTopics = {
+            1: [
+                "Unit 1: Friends (Greetings & Colors)", 
+                "Unit 2: At School (School Objects)", 
+                "Unit 3: Let's Play (Toys)", 
+                "Unit 4: Pet Show (Animals & Prepositions)"
+            ],
+            2: [
+                "Unit 5: Free Time (Days of the week)", 
+                "Unit 6: The Old House (Rooms & Furniture)", 
+                "Unit 7: Get Dressed! (Clothes)", 
+                "Unit 8: The Robot (Body Parts)", 
+                "Unit 9: At the Beach (Holidays & Weather)"
+            ],
+            3: [
+                "Unit 1: Welcome! (Daily Routines)", 
+                "Unit 2: Every Day (Occupations)", 
+                "Unit 3: Right Now (Present Continuous)", 
+                "Unit 4: Year In, Year Out (Months & Seasons)", 
+                "Unit 5: Food, Please!"
+            ],
+            4: [
+                "Unit 1: Where are you from? (Countries)", 
+                "Unit 2: My Week (School Subjects)", 
+                "Unit 3: In the Past (Past Tense)", 
+                "Unit 4: Celebrations (Ordinal Numbers)", 
+                "Unit 5: Eating Right (Quantifiers)", 
+                "Unit 6: Amazing Animals (Comparatives/Superlatives)",
+                "Unit 7: What's the matter? (Health/Illness)"
+            ],
+            5: [
+                "Unit 1: Towns and Cities (Places)", 
+                "Unit 2: Days (Adverbs of Frequency)", 
+                "Unit 3: Wild Life (Animals & Verbs)", 
+                "Unit 4: Learning World (Rules & Must/Mustn't)", 
+                "Unit 5: Food and Health (Countable/Uncountable)", 
+                "Unit 6: Space Exploration (Future Tense / Will)"
+            ],
+            6: [
+                "Unit 1: It's an Emergency! (Past Continuous)", 
+                "Unit 2: Life in the Past (Used to)", 
+                "Unit 3: Adventure Time (Present Perfect)", 
+                "Unit 4: Cool Jobs (Professions)", 
+                "Unit 5: How is it made? (Passive Voice)", 
+                "Unit 6: Tell me a story (Conjunctions)"
+            ]
+        };
+
+        let currentQuestions = [];
+
+        window.onload = () => { updateTopics(); };
+
+        function updateTopics() {
+            const tahun = document.getElementById('tahun').value;
+            const topikSelect = document.getElementById('topik');
+            topikSelect.innerHTML = '';
+            dskpTopics[tahun].forEach((topik, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = topik;
+                topikSelect.appendChild(option);
+            });
+        }
+
+        const dynamicVars = {
+            color: ["red", "blue", "green", "yellow", "black", "white"],
+            school_obj: ["pencil", "book", "ruler", "eraser", "bag"],
+            toy: ["kite", "doll", "monster", "train", "ball", "bike"],
+            pet: ["cat", "dog", "rabbit", "fish", "bird"],
+            day: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            room: ["living room", "bedroom", "kitchen", "bathroom"],
+            clothes: ["t-shirt", "skirt", "jacket", "shoes", "trousers"],
+            body_part: ["head", "arm", "leg", "hand", "foot", "knee"],
+            weather: ["sunny", "rainy", "windy", "cloudy", "snowy"],
+            routine: ["get up", "have breakfast", "go to school", "go home", "go to bed"],
+            verb_ing: ["reading", "playing", "eating", "sleeping", "running"],
+            season: ["spring", "summer", "autumn", "winter"],
+            food: ["chicken", "rice", "apple", "banana", "bread", "cheese"],
+            country: ["Malaysia", "the UK", "the US", "Korea", "China"],
+            past_verb: ["went", "saw", "ate", "played", "visited", "bought"],
+            animal_wild: ["tiger", "elephant", "crocodile", "giraffe", "monkey", "bear"],
+            illness: ["headache", "stomachache", "toothache", "fever", "cough"],
+            place: ["hospital", "school", "library", "cinema", "supermarket"],
+            job: ["doctor", "teacher", "police officer", "firefighter", "chef", "pilot"]
+        };
+
+        function replacePlaceholders(text) {
+            let result = text;
+            Object.keys(dynamicVars).forEach(key => {
+                const placeholder = `{${key}}`;
+                while (result.includes(placeholder)) {
+                    const arr = dynamicVars[key];
+                    const randomItem = arr[Math.floor(Math.random() * arr.length)];
+                    result = result.replace(placeholder, randomItem);
+                }
+            });
+            return result;
+        }
+
+        // PANGKALAN DATA BAHASA INGGERIS (Menggunakan Ikon, Jadual, Carta & Teks sahaja)
+        const bankEnglish = {
+            "friends": [
+                {q: "When we meet someone in the morning, we say 'Good ______'.", a: "morning", tahap: 1, type: "ikon", d: ["fa-sun", "text-yellow-500", "Greeting"]},
+                {q: "How do you spell the color '{color}'? (Type the spelling)", a: "{color}", tahap: 1, type: "teks"},
+                {q: "A, B, C, D, __, F, G. What is the missing letter?", a: "e", tahap: 1, type: "teks"}
+            ],
+            "school": [
+                {q: "I use a {school_obj} at school. What is the spelling of {school_obj}?", a: "{school_obj}", tahap: 1, type: "ikon", d: ["fa-school", "text-blue-500", "School Object"]},
+                {q: "I write in my _____. (Hint: It has pages)", a: "book", tahap: 1, type: "ikon", d: ["fa-book", "text-teal-600", "Object"]},
+                {q: "I use a ______ to draw a straight line.", a: "ruler", tahap: 1, type: "teks"}
+            ],
+            "play": [
+                {q: "The child is playing with a {toy}. Spell the word '{toy}'.", a: "{toy}", tahap: 1, type: "ikon", d: ["fa-gamepad", "text-green-500", "Toy"]},
+                {q: "<strong>Grammar:</strong> Is it a ball? Yes, it ____.", a: "is", tahap: 1, type: "teks"}
+            ],
+            "pet show": [
+                {q: "This animal is kept as a pet. Spell the word '{pet}'.", a: "{pet}", tahap: 1, type: "ikon", d: ["fa-paw", "text-orange-500", "Pet"]},
+                {q: "The cat is hiding under the table. What is the opposite of 'under'?", a: "on", tahap: 1, type: "ikon", d: ["fa-arrow-down", "text-gray-500", "Preposition"]},
+                {q: "<strong>Grammar:</strong> The bird is ____ the cage. (inside)", a: "in", tahap: 1, type: "teks"}
+            ],
+            "free time": [
+                {q: "The day after Sunday is...", a: "monday", tahap: 1, type: "ikon", d: ["fa-calendar-days", "text-red-500", "Days"]},
+                {q: "<strong>Vocabulary:</strong> We don't go to school on Saturday and...", a: "sunday", tahap: 1, type: "teks"}
+            ],
+            "old house": [
+                {q: "We cook food in the {room}. Spell the word '{room}'.", a: "{room}", tahap: 1, type: "ikon", d: ["fa-house", "text-purple-500", "Room"]},
+                {q: "<strong>Grammar:</strong> There _____ a cat in the living room. (is/are)", a: "is", tahap: 1, type: "teks"},
+                {q: "I sleep in the...", a: "bedroom", tahap: 1, type: "teks"}
+            ],
+            "get dressed": [
+                {q: "He is wearing a {clothes}. Spell the word '{clothes}'.", a: "{clothes}", tahap: 1, type: "ikon", d: ["fa-shirt", "text-blue-400", "Clothes"]},
+                {q: "<strong>Grammar:</strong> Does he like this hat? Yes, he ____.", a: "does", tahap: 1, type: "teks"}
+            ],
+            "robot": [
+                {q: "The robot has a metal {body_part}. Spell the word '{body_part}'.", a: "{body_part}", tahap: 1, type: "ikon", d: ["fa-robot", "text-gray-600", "Body Part"]},
+                {q: "<strong>Grammar:</strong> I ____ got ten fingers.", a: "have", tahap: 1, type: "teks"}
+            ],
+            "beach": [
+                {q: "The weather today is {weather}. Spell the word '{weather}'.", a: "{weather}", tahap: 1, type: "ikon", d: ["fa-cloud-sun", "text-yellow-600", "Weather"]},
+                {q: "Let's make a sand____ at the beach!", a: "castle", tahap: 1, type: "teks"}
+            ],
+            "welcome": [
+                {q: "Every morning, I ____ ___ at 7 o'clock. (Wake up)", a: "get up", tahap: 1, type: "ikon", d: ["fa-clock", "text-red-500", "Routine"]},
+                {q: "<strong>Grammar:</strong> She _____ her teeth every day. (brush/brushes)", a: "brushes", tahap: 1, type: "teks"}
+            ],
+            "every day": [
+                {q: "This person works in a hospital. The job is a {job}. Spell '{job}'.", a: "{job}", tahap: 1, type: "ikon", d: ["fa-user-doctor", "text-teal-500", "Job"]},
+                {q: "<strong>Grammar:</strong> A {job} _____ to help people.", a: "works", tahap: 1, type: "teks"}
+            ],
+            "right now": [
+                {q: "What is he doing right now? He is {verb_ing}. Spell '{verb_ing}'.", a: "{verb_ing}", tahap: 1, type: "ikon", d: ["fa-person-running", "text-orange-500", "Action"]},
+                {q: "<strong>Grammar (Present Continuous):</strong> They ____ playing football now. (is/are)", a: "are", tahap: 1, type: "teks"}
+            ],
+            "year in": [
+                {q: "This season is very cold and has snow. It is...", a: "winter", tahap: 1, type: "ikon", d: ["fa-snowflake", "text-blue-300", "Season"]},
+                {q: "The first month of the year is...", a: "january", tahap: 1, type: "teks"}
+            ],
+            "food": [
+                {q: "This delicious food is {food}. Spell '{food}'.", a: "{food}", tahap: 1, type: "ikon", d: ["fa-utensils", "text-red-500", "Food"]},
+                {q: "<strong>Grammar (Uncountable):</strong> Is there _____ milk in the fridge? (any/some)", a: "any", tahap: 1, type: "teks"},
+                {q: "<strong>Grammar (Countable):</strong> There are _____ apples on the table. (some/any)", a: "some", tahap: 2, type: "teks"}
+            ],
+            "where are you from": [
+                {q: "Kuala Lumpur is a city in {country}. Spell '{country}'.", a: "{country}", tahap: 2, type: "ikon", d: ["fa-earth-asia", "text-green-600", "Country"]},
+                {q: "<strong>Grammar:</strong> Where ____ you from? (is/are)", a: "are", tahap: 2, type: "teks"}
+            ],
+            "my week": [
+                {q: "We learn to count numbers in this subject. It is...", a: "math", tahap: 2, type: "ikon", d: ["fa-calculator", "text-gray-700", "Subject"]},
+                {q: "<strong>Grammar:</strong> I have PE ____ Wednesday. (in/on/at)", a: "on", tahap: 2, type: "teks"}
+            ],
+            "past": [
+                {q: "Yesterday, Ali _____ football in the field. (Play)", a: "played", tahap: 2, type: "ikon", d: ["fa-futbol", "text-black", "Past Tense"]},
+                {q: "<strong>Grammar (Past Tense):</strong> I ____ to the cinema last night. (go/went)", a: "went", tahap: 2, type: "teks"},
+                {q: "<strong>Grammar:</strong> She didn't _____ her homework yesterday. (do/did)", a: "do", tahap: 2, type: "teks"}
+            ],
+            "celebration": [
+                {q: "<strong>Ordinal Numbers:</strong> The number 1st is written as...", a: "first", tahap: 2, type: "teks"},
+                {q: "<strong>Ordinal Numbers:</strong> The number 3rd is written as...", a: "third", tahap: 2, type: "teks"}
+            ],
+            "amazing animal": [
+                {q: "This wild animal is a {animal_wild}. Spell '{animal_wild}'.", a: "{animal_wild}", tahap: 2, type: "ikon", d: ["fa-hippo", "text-stone-500", "Wild Animal"]},
+                {q: "<strong>Grammar (Comparative):</strong> A tiger is _____ than a cat. (big/bigger/biggest)", a: "bigger", tahap: 2, type: "teks"},
+                {q: "<strong>Grammar (Superlative):</strong> The cheetah is the _____ animal in the jungle. (fast/faster/fastest)", a: "fastest", tahap: 2, type: "teks"}
+            ],
+            "matter": [
+                {q: "He feels pain in his head. He has a...", a: "headache", tahap: 2, type: "ikon", d: ["fa-head-side-cough", "text-red-500", "Illness"]},
+                {q: "<strong>Grammar (Advice):</strong> You have a fever. You _____ see a doctor. (should/shouldn't)", a: "should", tahap: 2, type: "teks"}
+            ],
+            "town": [
+                {q: "If you are sick, you go to the {place}. Spell '{place}'.", a: "{place}", tahap: 2, type: "ikon", d: ["fa-building", "text-gray-500", "Place"]},
+                {q: "<strong>Vocabulary:</strong> You can buy food and groceries at the...", a: "supermarket", tahap: 2, type: "teks"}
+            ],
+            "space": [
+                {q: "Astronauts travel to space in a...", a: "rocket", tahap: 2, type: "ikon", d: ["fa-rocket", "text-purple-600", "Space"]},
+                {q: "<strong>Grammar (Future):</strong> Next year, humans _____ travel to Mars. (will/did)", a: "will", tahap: 2, type: "teks"}
+            ],
+            "emergency": [
+                {q: "We must call the firefighter because there is a...", a: "fire", tahap: 2, type: "ikon", d: ["fa-fire", "text-orange-500", "Emergency"]},
+                {q: "<strong>Grammar (Past Continuous):</strong> I was _____ TV when the phone rang. (watch/watching)", a: "watching", tahap: 2, type: "teks"}
+            ],
+            "made": [
+                {q: "<strong>Grammar (Passive Voice):</strong> The cake _____ baked by my mother. (is/are)", a: "is", tahap: 2, type: "teks"},
+                {q: "<strong>Grammar (Passive Voice):</strong> The letters _____ written by the students. (was/were)", a: "were", tahap: 2, type: "teks"}
+            ],
+            "story": [
+                {q: "<strong>Conjunctions:</strong> I wanted to go out, _____ it was raining. (and/but/because)", a: "but", tahap: 2, type: "teks"},
+                {q: "<strong>Conjunctions:</strong> She was happy _____ she won the first prize. (but/because)", a: "because", tahap: 2, type: "teks"}
+            ],
+            "grammar": [
+                {q: "<strong>Grammar:</strong> She _____ a new bicycle. (has/have)", a: "has", tahap: 1, type: "teks"},
+                {q: "<strong>Grammar:</strong> They _____ going to the park. (is/are)", a: "are", tahap: 1, type: "teks"},
+                {q: "<strong>Grammar:</strong> He _____ a book every night. (read/reads)", a: "reads", tahap: 2, type: "teks"},
+                {q: "<strong>Grammar Table:</strong><br><table style='width:100%; border-collapse: collapse; margin: 10px 0; text-align: left; font-size: 0.9rem;'><tr><th style='border: 1px solid #94a3b8; padding: 5px; background: #e2e8f0;'>Present Tense</th><th style='border: 1px solid #94a3b8; padding: 5px; background: #e2e8f0;'>Past Tense</th></tr><tr><td style='border: 1px solid #94a3b8; padding: 5px;'>Go</td><td style='border: 1px solid #94a3b8; padding: 5px;'>Went</td></tr><tr><td style='border: 1px solid #94a3b8; padding: 5px;'>Eat</td><td style='border: 1px solid #94a3b8; padding: 5px;'>?</td></tr></table>What is the past tense of Eat?", a: "ate", tahap: 2, type: "jadual"},
+                {q: "<strong>Grammar Table:</strong><br><table style='width:100%; border-collapse: collapse; margin: 10px 0; text-align: left; font-size: 0.9rem;'><tr><th style='border: 1px solid #94a3b8; padding: 5px; background: #e2e8f0;'>Singular</th><th style='border: 1px solid #94a3b8; padding: 5px; background: #e2e8f0;'>Plural</th></tr><tr><td style='border: 1px solid #94a3b8; padding: 5px;'>Child</td><td style='border: 1px solid #94a3b8; padding: 5px;'>Children</td></tr><tr><td style='border: 1px solid #94a3b8; padding: 5px;'>Mouse</td><td style='border: 1px solid #94a3b8; padding: 5px;'>?</td></tr></table>What is the plural for Mouse?", a: "mice", tahap: 2, type: "jadual"}
+            ]
+        };
+
+        // Fungsi genDiagramHTML untuk merender ikon grafik dari FontAwesome
+        function genDiagramHTML(iconInfo) {
+            if (!iconInfo) return ''; 
+            let [icon, color, label] = iconInfo;
+            return `
+                <div class="quiz-diagram">
+                    <i class="fas ${icon} ${color}"></i>
+                    <div class="quiz-diagram-label">${label}</div>
+                </div>
+            `;
+        }
+
+        function generateEnglishLogic(tahun, unitIndex, difficulty, indexSoalan) {
+            tahun = parseInt(tahun);
+            let tahapSemasa = (tahun <= 3) ? 1 : 2; 
+
+            let topicStr = dskpTopics[tahun][unitIndex].toLowerCase();
+            let matchedKey = Object.keys(bankEnglish).find(key => topicStr.includes(key));
+            
+            // Fallback Pintar Berdasarkan Kata Kunci
+            if (!matchedKey) {
+                if (topicStr.includes("phonics")) matchedKey = "friends";
+                else if (topicStr.includes("animal")) matchedKey = "amazing animal";
+                else if (topicStr.includes("food")) matchedKey = "food";
+                else matchedKey = "grammar"; 
+            }
+
+            let rawPool = bankEnglish[matchedKey] || bankEnglish["grammar"];
+            
+            if (matchedKey !== "grammar") {
+                rawPool = rawPool.concat(bankEnglish["grammar"]);
+            }
+            
+            // TAPISAN KETAT MENGIKUT TAHAP
+            let pool = rawPool.filter(q => q.tahap === tahapSemasa || !q.tahap);
+            
+            if(pool.length === 0) pool = rawPool;
+
+            let qObj = pool[Math.floor(Math.random() * pool.length)];
+            let soalanTeks = replacePlaceholders(qObj.q);
+            let jawapan = qObj.a;
+            let currentType = qObj.type || 'teks';
+
+            let soalanLengkap = "";
+            if (currentType === "ikon" && qObj.d) {
+                soalanLengkap = genDiagramHTML(qObj.d) + soalanTeks;
+            } else {
+                soalanLengkap = soalanTeks;
+            }
+
+            return { soalan: soalanLengkap, jawapan: jawapan, rawText: soalanTeks, type: currentType };
+        }
+
+        function generateUniqueQuestions(tahun, unitIndex) {
+            let visualQuestions = [];
+            let textQuestions = [];
+            let usedQuestionTexts = new Set();
+            let usedAnswersCounts = {};
+
+            function getQuestion(needsVisual) {
+                let attempts = 0;
+                let qData;
+                while(attempts < 150) {
+                    qData = generateEnglishLogic(tahun, unitIndex, Math.floor(Math.random()*3)+1, attempts);
+                    let isVisual = qData.type !== 'teks';
+                    let ansKey = qData.jawapan.toLowerCase();
+                    let currentAnsCount = usedAnswersCounts[ansKey] || 0;
+                    
+                    if ((needsVisual ? isVisual : !isVisual) && !usedQuestionTexts.has(qData.rawText) && currentAnsCount < 3) {
+                        return qData;
+                    }
+                    attempts++;
+                }
+                
+                attempts = 0;
+                while(attempts < 100) {
+                    qData = generateEnglishLogic(tahun, unitIndex, Math.floor(Math.random()*3)+1, attempts);
+                    let isVisual = qData.type !== 'teks';
+                    if ((needsVisual ? isVisual : !isVisual) && !usedQuestionTexts.has(qData.rawText)) {
+                        return qData;
+                    }
+                    attempts++;
+                }
+                return generateEnglishLogic(tahun, unitIndex, Math.floor(Math.random()*3)+1, 0);
+            }
+
+            for(let i=0; i<15; i++) {
+                let q = getQuestion(true); 
+                usedQuestionTexts.add(q.rawText);
+                usedAnswersCounts[q.jawapan.toLowerCase()] = (usedAnswersCounts[q.jawapan.toLowerCase()] || 0) + 1;
+                visualQuestions.push(q);
+            }
+
+            for(let i=0; i<15; i++) {
+                let q = getQuestion(false); 
+                usedQuestionTexts.add(q.rawText);
+                usedAnswersCounts[q.jawapan.toLowerCase()] = (usedAnswersCounts[q.jawapan.toLowerCase()] || 0) + 1;
+                textQuestions.push(q);
+            }
+
+            let combined = visualQuestions.concat(textQuestions);
+            
+            // Gaulkan (Shuffle) kedudukan
+            for (let i = combined.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [combined[i], combined[j]] = [combined[j], combined[i]];
+            }
+            return combined;
+        }
+
+        function generateLatihan() {
+            const tahun = document.getElementById('tahun').value;
+            const topik = document.getElementById('topik');
+            const unitText = topik.options[topik.selectedIndex].text;
+            const setNum = document.getElementById('set').value;
+            const unitIndex = topik.value;
+
+            document.getElementById('tajuk-latihan').textContent = `Year ${tahun} - ${unitText.split(':')[1] || unitText} (Set ${setNum})`;
+            
+            const container = document.getElementById('soalan-list');
+            container.innerHTML = '';
+
+            currentQuestions = generateUniqueQuestions(tahun, unitIndex);
+
+            currentQuestions.forEach((qData, index) => {
+                let i = index + 1;
+                let difficulty = i <= 10 ? 1 : (i <= 20 ? 2 : 3);
+                let arasLabel = difficulty === 1 ? "Level 1" : (difficulty === 2 ? "Level 2" : "Level 3");
+                let badgeColor = difficulty === 1 ? "bg-green-100 text-green-800" : (difficulty === 2 ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800");
+
+                const html = `
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative group hover:shadow-md transition">
+                        <div class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded ${badgeColor} uppercase tracking-wider">
+                            ${arasLabel}
+                        </div>
+                        <div class="flex items-start mb-4 mt-2">
+                            <span class="w-8 h-8 rounded-full bg-blue-600 text-white flex-shrink-0 flex items-center justify-center font-bold mr-3 shadow-sm z-10">${i}</span>
+                            <span class="text-lg font-medium text-gray-800 leading-snug w-full" style="min-height: 40px; margin-top: 25px;">${qData.soalan}</span>
+                        </div>
+                        <div class="ml-11">
+                            <input type="text" id="ans-${i}" placeholder="Type your answer here..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" autocomplete="off">
+                            <p id="feedback-${i}" class="text-sm font-semibold mt-2 hidden"></p>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('latihan-container').classList.remove('hidden');
+            document.getElementById('keputusan-box').classList.add('hidden');
+            document.getElementById('btn-semak').classList.remove('hidden');
+        }
+
+        function semakJawapan() {
+            let skor = 0;
+            const total = 30;
+
+            currentQuestions.forEach((q, index) => {
+                let i = index + 1;
+                const inputEl = document.getElementById(`ans-${i}`);
+                const feedbackEl = document.getElementById(`feedback-${i}`);
+                
+                let userAns = inputEl.value.trim().toLowerCase();
+                let correctAns = q.jawapan.toString().toLowerCase();
+
+                inputEl.classList.remove('correct-ans', 'wrong-ans');
+                feedbackEl.classList.remove('hidden', 'text-green-600', 'text-red-600');
+
+                // Pemeriksaan tepat 
+                let isCorrect = (userAns === correctAns);
+
+                if(isCorrect) {
+                    skor++;
+                    inputEl.classList.add('correct-ans');
+                    feedbackEl.textContent = "✔ Correct!";
+                    feedbackEl.classList.add('text-green-600');
+                } else {
+                    inputEl.classList.add('wrong-ans');
+                    let formattedAns = correctAns.charAt(0).toUpperCase() + correctAns.slice(1);
+                    feedbackEl.innerHTML = `✘ Wrong. The correct answer is: <strong>${formattedAns}</strong>`;
+                    feedbackEl.classList.add('text-red-600');
+                }
+            });
+
+            const peratus = ((skor / total) * 100).toFixed(0);
+
+            document.getElementById('btn-semak').classList.add('hidden');
+            document.getElementById('keputusan-box').classList.remove('hidden');
+            
+            document.getElementById('skor-teks').textContent = `${skor} / ${total}`;
+            document.getElementById('peratus-teks').textContent = `${peratus}%`;
+
+            document.getElementById('keputusan-box').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function bukaDanEditCetak() {
+            if (currentQuestions.length === 0) {
+                alert("Sila jana soalan terlebih dahulu sebelum membuat pratonton cetakan.");
+                return;
+            }
+
+            const tahun = document.getElementById('tahun').value;
+            const topik = document.getElementById('topik');
+            const unitText = topik.options[topik.selectedIndex].text;
+            const setNum = document.getElementById('set').value;
+
+            const cssBentukLazim = `
+                .bentuk-lazim-container { display: inline-block; font-family: 'Courier New', Courier, monospace; font-size: 1.25rem; text-align: right; line-height: 1.2; margin-top: 5px; padding: 10px 15px; border: 1px solid #ccc; border-radius: 8px; background: #fafafa; }
+                .bentuk-lazim-bottom { border-bottom: 2px solid #000; padding-bottom: 2px; margin-bottom: 5px; }
+                .quiz-diagram { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; margin-bottom: 10px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; min-height: 100px;}
+                .quiz-diagram i { font-size: 2.5rem; }
+                .quiz-diagram-label { font-size: 0.75rem; font-weight: bold; color: #475569; margin-top: 5px; text-transform: uppercase; text-align: center;}
+                .bar-chart-container { display: flex; align-items: flex-end; gap: 15px; height: 80px; margin: 20px 0 30px 20px; border-bottom: 2px solid #333; border-left: 2px solid #333; padding-left: 10px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                .bar { width: 30px; position: relative; text-align: center; border: 1px solid #000; }
+                .bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: bold; white-space: nowrap; }
+            `;
+
+            let soalanHTML = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: auto; background: white; color: black;">
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px;">
+                        <h2 style="margin: 0; font-size: 24px;">ENGLISH CEFR WORKSHEET</h2>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 14px;">
+                        <div>
+                            <p style="margin:5px 0;"><strong>Name:</strong> _______________________</p>
+                            <p style="margin:5px 0;"><strong>Class:</strong> _______________________</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="margin:5px 0;"><strong>Topic:</strong> Year ${tahun} - ${unitText.split(':')[1] || unitText} (Set ${setNum})</p>
+                            <p style="margin:5px 0;"><strong>Marks:</strong> _______ / 100%</p>
+                        </div>
+                    </div>
+                    
+                    <table style="width: 100%; border-collapse: collapse;">
+            `;
+
+            for (let i = 0; i < currentQuestions.length; i++) {
+                soalanHTML += `
+                    <tr>
+                        <td style="padding: 15px 10px; width: 5%; vertical-align: top; font-weight: bold; font-size: 16px;">${i + 1}.</td>
+                        <td style="padding: 15px 10px; width: 45%; vertical-align: top; font-size: 16px;">${currentQuestions[i].soalan}</td>
+                        <td style="padding: 15px 10px; width: 50%; border-bottom: 1px dashed #ccc; vertical-align: bottom;"></td>
+                    </tr>
+                `;
+            }
+
+            soalanHTML += `
+                    </table>
+                </div>
+            `;
+
+            var win = window.open('', '_blank', 'height=800,width=1000');
+            
+            win.document.write('<!DOCTYPE html><html><head><title>Pratonton Latihan & Cetak</title>');
+            win.document.write('<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">');
+            win.document.write('<style>');
+            win.document.write('body { background: #e2e8f0; font-family: sans-serif; margin: 0; padding: 20px; }');
+            win.document.write('.toolbar { text-align: center; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; position: sticky; top: 0; z-index: 100; }');
+            win.document.write('.edit-box { background: white; box-shadow: 0 10px 15px rgba(0,0,0,0.1); border-radius: 4px; padding: 20px; min-height: 1000px; border: 1px dashed #94a3b8; outline: none;}');
+            win.document.write('@media print { body { background: white; padding: 0; } .toolbar, h3 { display: none !important; } .edit-box { border: none !important; box-shadow: none !important; padding: 0 !important; } * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }');
+            win.document.write(cssBentukLazim); 
+            win.document.write('</style>');
+            win.document.write('</head><body>');
+            
+            win.document.write('<div class="toolbar">');
+            win.document.write('<h3 style="margin-top:0; color:#334155;">Sila edit teks di bawah jika perlu sebelum mencetak:</h3>');
+            win.document.write('<button onclick="window.print()" style="padding:12px 24px; background:#2563eb; color:white; border:none; cursor:pointer; font-size: 16px; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">🖨️ Cetak Kertas Peperiksaan</button>');
+            win.document.write('</div>');
+            
+            win.document.write('<div id="editor" contenteditable="true" class="edit-box">');
+            win.document.write(soalanHTML);
+            win.document.write('</div>');
+            
+            win.document.write('</body></html>');
+            win.document.close();
+        }
+    </script>
+</body>
+</html>
